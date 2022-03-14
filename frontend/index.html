@@ -33,27 +33,44 @@
       </td>
     </tr>
     <tr>
-      <td>Moving Average</td>
+      <td>Web parallel</td>
       <td>
         <button id="btnMovingAverage">Start</button>
+        <input type="number"
+               min="0"
+               max="499"
+               placeholder="ID"
+               id="userIdInput" />
       </td>
     </tr>
     <tr>
-      <td>Mehrfachklicks</td>
+      <td>Web cascading</td>
       <td>
         <button id="btnMultipleClicks">Start</button>
+        <input type="number"
+               min="0"
+               max="499"
+               placeholder="ID"
+               id="idInput" />
+        <span id="nameOut"></span>
       </td>
     </tr>
     <tr>
-      <td>Web sequential list</td>
+      <td>BMI</td>
       <td>
         <button id="btnWebSequentialList">Start</button>
-        <label>UserId</label>
         <span id="lblUserId"></span>
-        <input type="range"
+        <input type="number"
                min="1"
                max="10"
-               id="sldUserIdSequential" />
+               placeholder="Weight"
+               id="weightInput" />
+        <input type="number"
+               min="0"
+               max="200"
+               placeholder="Height"
+               id="heightInput" />
+        <span id="bmiOut"></span>
       </td>
     </tr>
   </table>

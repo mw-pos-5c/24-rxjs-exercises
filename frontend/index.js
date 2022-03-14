@@ -1,3 +1,4 @@
+
 window.onload = () => {
     // #region RxJs imports
     const Rx = rxjs;
@@ -115,7 +116,7 @@ window.onload = () => {
             pairwise(),
             map(x => distance(x[0], x[1])),
             tap(x => console.log(x)),
-            tap(x => total+=x),
+            tap(x => total += x),
             debounceTime(1000),
             map(x => Math.round(total))
         ).subscribe(RxJsVisualizer.observerForLine(1));
@@ -126,13 +127,36 @@ window.onload = () => {
     // #region ------------------------------------------------------------------ moving average
     function btnMovingAverage() {
 
+        Rx.fromEvent($("#userIdInput"), "change")
+            .pipe(
+                map(e => e.target.value),
+                Rx.expand(x => cons)
+            )
+
     }
 
     // #endregion
 
     // #region ------------------------------------------------------------------ multiple clicks
     function btnMultipleClicks() {
+        Rx.fromEvent($("#idInput"), "change")
+            .pipe(
+                map(e => e.target.value),
+                flatMap(async id => {
+                    let response = await fetch('https://jsonplaceholder.typicode.com/comments/' + id)
+                    let comment = await response.json()
 
+                    response = await fetch('https://jsonplaceholder.typicode.com/posts/' + comment.postId)
+                    let post = await response.json()
+                    response = await fetch('https://jsonplaceholder.typicode.com/users/' + post.userId)
+                    let user = await response.json()
+
+                    return user.username
+                })
+            )
+            .subscribe(x => {
+                document.querySelector("#nameOut").innerText = x;
+            });
     }
 
     // #endregion
@@ -156,8 +180,16 @@ window.onload = () => {
 
     // #region ------------------------------------------------------------------ web sequential
     function btnWebSequentialList() {
-        // https://jsonplaceholder.typicode.com/posts?userId=7 ==> postId 61-70
-        // https://jsonplaceholder.typicode.com/comments?postId=61 ==> commentId 301-350
+        const weightObs = Rx.fromEvent(document.querySelector("#weightInput"), "input");
+        const heightObs = Rx.fromEvent(document.querySelector("#heightInput"), "input");
+        const outSpan = document.querySelector("#bmiOut");
+
+        Rx.combineLatest(weightObs, heightObs).subscribe(([$weight, $height]) => {
+            const weight = $weight.target.value
+            const height = $height.target.value
+
+            outSpan.innerText = weight / (height * height)
+        })
     }
 
     // #endregion
