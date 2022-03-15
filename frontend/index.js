@@ -124,7 +124,7 @@ window.onload = () => {
     // #endregion
 
     // #region ------------------------------------------------------------------ moving average
-    function btnMovingAverage() {
+    function btnMovingAverage() { // Web parallel
 
         Rx.fromEvent($("#userIdInput"), "change")
             .pipe(
@@ -156,7 +156,7 @@ window.onload = () => {
     // #endregion
 
     // #region ------------------------------------------------------------------ multiple clicks
-    function btnMultipleClicks() {
+    function btnMultipleClicks() { // Web cascading
         Rx.fromEvent($("#idInput"), "change")
             .pipe(
                 map(e => e.target.value),
@@ -197,7 +197,7 @@ window.onload = () => {
 
 
     // #region ------------------------------------------------------------------ web sequential
-    function btnWebSequentialList() {
+    function btnWebSequentialList() { // BMI
         const weightObs = Rx.fromEvent(document.querySelector("#weightInput"), "input");
         const heightObs = Rx.fromEvent(document.querySelector("#heightInput"), "input");
         const outSpan = document.querySelector("#bmiOut");
