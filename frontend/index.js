@@ -1,4 +1,3 @@
-
 window.onload = () => {
     // #region RxJs imports
     const Rx = rxjs;
@@ -130,8 +129,27 @@ window.onload = () => {
         Rx.fromEvent($("#userIdInput"), "change")
             .pipe(
                 map(e => e.target.value),
-                Rx.expand(x => cons)
-            )
+                switchMap(id => {
+                    return Rx.forkJoin(
+                        Rx.from(fetch('https://jsonplaceholder.typicode.com/todos?userId=' + id).then(x => x.json()))
+                            .pipe(
+                                map(u => u.slice(0, 5)),
+                            ),
+                        Rx.from(fetch('https://jsonplaceholder.typicode.com/albums?userId=' + id).then(x => x.json()))
+                            .pipe(
+                                map(a => a.slice(0, 5)),
+                            ),
+                    );
+                }),
+            ).subscribe(([album, todo]) => {
+                for (const albumElement of album.map(x => 'album ' + x.title)) {
+                    RxJsVisualizer.writeToLine(albumElement)
+                }
+                for (const todoElement of todo.map(x => 'todo ' + x.title)) {
+                    RxJsVisualizer.writeToLine(todoElement)
+                }
+            }
+        )
 
     }
 
